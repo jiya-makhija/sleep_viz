@@ -3330,6 +3330,37 @@ function generateInsights(user, participant) {
    return insights.join('');
 }
 
+function moveMoonTo(sectionId) {
+    const moon = document.querySelector('.moon-character');
+    const target = document.getElementById(sectionId);
+
+    if (!moon || !target) return;
+
+    // Move moon with animation
+    const newMoon = moon.cloneNode(true);
+    newMoon.style.animation = 'moon-float 1.2s ease-in-out';
+    newMoon.onclick = toggleSleepyMoon; // reattach click handler
+
+    // Remove old moon after short delay
+    moon.remove();
+    target.appendChild(newMoon);
+}
+const moonAnim = document.createElement('style');
+moonAnim.textContent = `
+    @keyframes moon-float {
+        0% { transform: scale(1) translateY(-20px); opacity: 0; }
+        50% { transform: scale(1.1) translateY(5px); opacity: 0.5; }
+        100% { transform: scale(1) translateY(0); opacity: 1; }
+    }
+`;
+document.head.appendChild(moonAnim);
+setTimeout(() => moveMoonTo('moon-in-hr'), 3000);
+
+// After quiz ends:
+document.getElementById("skipBtn").addEventListener("click", () => {
+    moveMoonTo("moon-in-predictor");
+});
+
 document.addEventListener('DOMContentLoaded', function() {
    new InfoController();
 });
