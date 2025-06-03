@@ -1,4 +1,92 @@
+// Enhanced script with Luna character interactions while preserving all original functionality
+
 let currentUser = 1;
+
+// Luna Character Interactions
+const lunaMessages = [
+    "Hello! I'm Luna, your sleep guide! 🌙",
+    "Did you know your heart rate drops during sleep? ❤️",
+    "Sleep is when your body repairs itself! ✨",
+    "Melatonin helps you feel sleepy! 💤",
+    "Good sleep makes everything better! 🌟",
+    "Sweet dreams are made of good sleep hygiene! 💫",
+    "I love watching over sleepy data! 🌙✨"
+];
+
+let lunaMessageIndex = 0;
+
+function interactWithLuna() {
+    const lunaCharacter = document.querySelector('.luna-character');
+    const lunaSpeech = document.getElementById('luna-speech');
+    const lunaEyes = document.querySelectorAll('.luna-eye');
+    const lunaMouth = document.getElementById('luna-mouth');
+    
+    // Make Luna happy
+    lunaEyes.forEach(eye => {
+        eye.classList.remove('sleepy');
+    });
+    lunaMouth.classList.add('happy');
+    
+    // Show speech bubble with cycling messages
+    lunaSpeech.textContent = lunaMessages[lunaMessageIndex];
+    lunaSpeech.classList.add('show');
+    
+    // Cycle through messages
+    lunaMessageIndex = (lunaMessageIndex + 1) % lunaMessages.length;
+    
+    // Hide speech bubble after 3 seconds
+    setTimeout(() => {
+        lunaSpeech.classList.remove('show');
+        lunaMouth.classList.remove('happy');
+    }, 3000);
+    
+    // Add some sparkle effect
+    createLunaSparkles();
+}
+
+function createLunaSparkles() {
+    const lunaContainer = document.querySelector('.luna-container');
+    const sparkleCount = 8;
+    
+    for (let i = 0; i < sparkleCount; i++) {
+        const sparkle = document.createElement('div');
+        sparkle.innerHTML = ['✨', '⭐', '💫', '🌟'][Math.floor(Math.random() * 4)];
+        sparkle.style.position = 'absolute';
+        sparkle.style.fontSize = '16px';
+        sparkle.style.pointerEvents = 'none';
+        sparkle.style.zIndex = '5';
+        
+        // Random position around Luna
+        const angle = (i / sparkleCount) * 2 * Math.PI;
+        const radius = 80 + Math.random() * 40;
+        const x = Math.cos(angle) * radius;
+        const y = Math.sin(angle) * radius;
+        
+        sparkle.style.left = `${70 + x}px`;
+        sparkle.style.top = `${70 + y}px`;
+        sparkle.style.opacity = '0';
+        sparkle.style.transition = 'all 1s ease-out';
+        
+        lunaContainer.appendChild(sparkle);
+        
+        // Animate sparkle
+        setTimeout(() => {
+            sparkle.style.opacity = '1';
+            sparkle.style.transform = `scale(1.5) rotate(${Math.random() * 360}deg)`;
+        }, i * 100);
+        
+        // Remove sparkle
+        setTimeout(() => {
+            sparkle.style.opacity = '0';
+            sparkle.style.transform = `scale(0) rotate(${Math.random() * 360}deg)`;
+            setTimeout(() => {
+                if (sparkle.parentNode) {
+                    sparkle.parentNode.removeChild(sparkle);
+                }
+            }, 1000);
+        }, 1000 + i * 100);
+    }
+}
 
 function toggleSleepyMoon() {
     const leftEye = document.getElementById('left-eye');
@@ -9,20 +97,101 @@ function toggleSleepyMoon() {
     rightEye.classList.toggle('sleepy');
     
     // Add a little bounce effect
-    const moonChar = document.querySelector('.moon-character');
-    moonChar.style.animation = 'none';
+    const lunaChar = document.querySelector('.luna-character');
+    lunaChar.style.animation = 'none';
     setTimeout(() => {
-        moonChar.style.animation = 'gentle-float 4s ease-in-out infinite';
+        lunaChar.style.animation = 'luna-float 8s ease-in-out infinite';
     }, 100);
 }
 
 // Auto-toggle sleepy state occasionally
 setInterval(() => {
-    if (Math.random() < 0.3) { // 30% chance every 5 seconds
+    if (Math.random() < 0.3) { // 30% chance every 8 seconds
         toggleSleepyMoon();
     }
-}, 5000);
+}, 8000);
 
+// Mini Luna interactions
+document.addEventListener('DOMContentLoaded', function() {
+    // Add click handlers to mini Luna moons
+    setTimeout(() => {
+        const miniLunas = document.querySelectorAll('.luna-mini');
+        miniLunas.forEach(mini => {
+            mini.addEventListener('click', function() {
+                createMiniSparkle(this);
+                showMiniMessage();
+            });
+        });
+    }, 1000);
+});
+
+function createMiniSparkle(element) {
+    const sparkle = document.createElement('div');
+    sparkle.innerHTML = '✨';
+    sparkle.style.position = 'absolute';
+    sparkle.style.fontSize = '20px';
+    sparkle.style.pointerEvents = 'none';
+    sparkle.style.zIndex = '15';
+    sparkle.style.left = '50%';
+    sparkle.style.top = '50%';
+    sparkle.style.transform = 'translate(-50%, -50%)';
+    sparkle.style.opacity = '0';
+    sparkle.style.transition = 'all 0.8s ease-out';
+    
+    element.appendChild(sparkle);
+    
+    setTimeout(() => {
+        sparkle.style.opacity = '1';
+        sparkle.style.transform = 'translate(-50%, -50%) scale(2) rotate(360deg)';
+    }, 10);
+    
+    setTimeout(() => {
+        if (sparkle.parentNode) {
+            sparkle.parentNode.removeChild(sparkle);
+        }
+    }, 800);
+}
+
+function showMiniMessage() {
+    const messages = ["Keep exploring! 🌙", "Luna approves! ✨", "Sweet data! 💫"];
+    const message = messages[Math.floor(Math.random() * messages.length)];
+    
+    // Create temporary message
+    const msgElement = document.createElement('div');
+    msgElement.textContent = message;
+    msgElement.style.position = 'fixed';
+    msgElement.style.top = '20px';
+    msgElement.style.right = '20px';
+    msgElement.style.background = 'linear-gradient(135deg, rgba(30, 41, 59, 0.95), rgba(51, 65, 85, 0.95))';
+    msgElement.style.color = '#f1f5f9';
+    msgElement.style.padding = '10px 15px';
+    msgElement.style.borderRadius = '10px';
+    msgElement.style.fontSize = '14px';
+    msgElement.style.zIndex = '10001';
+    msgElement.style.border = '1px solid rgba(251, 191, 36, 0.3)';
+    msgElement.style.backdropFilter = 'blur(10px)';
+    msgElement.style.opacity = '0';
+    msgElement.style.transition = 'all 0.3s ease';
+    
+    document.body.appendChild(msgElement);
+    
+    setTimeout(() => {
+        msgElement.style.opacity = '1';
+        msgElement.style.transform = 'translateY(0)';
+    }, 10);
+    
+    setTimeout(() => {
+        msgElement.style.opacity = '0';
+        msgElement.style.transform = 'translateY(-20px)';
+        setTimeout(() => {
+            if (msgElement.parentNode) {
+                msgElement.parentNode.removeChild(msgElement);
+            }
+        }, 300);
+    }, 2000);
+}
+
+// Enhanced toggle button functionality
 document.getElementById("toggleUserView").addEventListener("click", function() {
     const userSection = document.getElementById("userSpecificSection");
     const button = this;
@@ -31,35 +200,43 @@ document.getElementById("toggleUserView").addEventListener("click", function() {
     if (userSection.style.display === "none" || userSection.style.display === "") {
         // Show user-specific section with animation
         userSection.style.display = "block";
-        button.textContent = "🔒 Hide Specific Users ";
-        button.appendChild(icon);
+        button.innerHTML = `<span class="button-text">🔒 Hide Individual Data</span><span class="icon">▲</span>`;
         button.classList.add('expanded');
         
-        // Add a subtle shake animation to draw attention
-        button.style.animation = 'shake 0.5s ease-in-out';
+        // Add a subtle animation
+        button.style.animation = 'pulse-glow 0.6s ease-in-out';
         setTimeout(() => {
             button.style.animation = '';
+        }, 600);
+        
+        // Show Luna's approval
+        setTimeout(() => {
+            interactWithLuna();
         }, 500);
         
     } else {
         // Hide user-specific section
         userSection.style.display = "none";
-        button.textContent = "🔍 View Specific Users ";
-        button.appendChild(icon);
+        button.innerHTML = `<span class="button-text">🔍 Explore Individual Data</span><span class="icon">▼</span>`;
         button.classList.remove('expanded');
     }
 });
 
-// Add shake keyframe animation
-const style = document.createElement('style');
-style.textContent = `
-    @keyframes shake {
-        0%, 100% { transform: translateX(0); }
-        25% { transform: translateX(-5px); }
-        75% { transform: translateX(5px); }
-    }
-`;
-document.head.appendChild(style);
+// Add shake keyframe animation if it doesn't exist
+if (!document.querySelector('#shake-animation')) {
+    const style = document.createElement('style');
+    style.id = 'shake-animation';
+    style.textContent = `
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+    `;
+    document.head.appendChild(style);
+}
+
+// ============= ORIGINAL FUNCTIONALITY PRESERVED BELOW =============
 
 // Your actual data loading code
 const userIDs = Array.from({ length: 21 }, (_, i) => i + 1).filter(user => user !== 11 && user !== 21);
@@ -934,7 +1111,6 @@ function setupSleepClock() {
                 .attr("y", ampmY)
                 .attr("text-anchor", "middle")
                 .attr("alignment-baseline", "middle");
-                /* .text(i < 12 ? "AM" : "PM"); */
         }
     }
 
@@ -1586,172 +1762,7 @@ function addSleepAnnotation(g, sleepPeriod, xScale, yScale, height, processedDat
     return sleepGroup;
 }
 
-// Parse sleep period from sleepInfo - FIXED VERSION
-function parseSleepPeriod(sleepInfo) {
-    if (!sleepInfo) return null;
-    
-    try {
-        const baseDate = new Date(2024, 0, 1);
-        
-        // Parse onset time (sleep start)
-        const onsetDay = +sleepInfo["Onset Date"];
-        const onsetTime = sleepInfo["Onset Time"];
-        const [onsetHours, onsetMinutes] = onsetTime.split(':').map(Number);
-        
-        // Parse out bed time (sleep end)
-        const outBedDay = +sleepInfo["Out Bed Date"];
-        const outBedTime = sleepInfo["Out Bed Time"];
-        const [outBedHours, outBedMinutes] = outBedTime.split(':').map(Number);
-        
-        // Calculate datetime objects - FIXED to handle day transitions properly
-        const onsetSeconds = (onsetDay - 1) * 86400 + onsetHours * 3600 + onsetMinutes * 60;
-        const outBedSeconds = (outBedDay - 1) * 86400 + outBedHours * 3600 + outBedMinutes * 60;
-        
-        const sleepStart = new Date(baseDate.getTime() + onsetSeconds * 1000);
-        const sleepEnd = new Date(baseDate.getTime() + outBedSeconds * 1000);
-        
-        // VALIDATION: Ensure sleep end is after sleep start
-        if (sleepEnd <= sleepStart) {
-            console.error("Sleep end time is before or equal to start time:", {
-                start: sleepStart,
-                end: sleepEnd,
-                onsetDay: onsetDay,
-                outBedDay: outBedDay,
-                onsetTime: onsetTime,
-                outBedTime: outBedTime
-            });
-            return null;
-        }
-        
-        return {
-            start: sleepStart,
-            end: sleepEnd,
-            totalSleepTime: +sleepInfo["Total Sleep Time (TST)"], // in minutes
-            efficiency: +sleepInfo.Efficiency,
-            onsetTime: onsetTime,
-            outBedTime: outBedTime,
-            onsetDay: onsetDay,
-            outBedDay: outBedDay
-        };
-    } catch (error) {
-        console.error("Error parsing sleep period:", error);
-        return null;
-    }
-}
-
-// Add sleep annotation to the graph - FIXED VERSION
-function addSleepAnnotation(g, sleepPeriod, xScale, yScale, height, hrData) {
-    const sleepStart = xScale(sleepPeriod.start);
-    
-    // Clamp sleep end to the graph bounds if it extends beyond available data
-    const graphEnd = xScale.range()[1]; // Get the maximum x position of the graph
-    const sleepEndRaw = xScale(sleepPeriod.end);
-    const sleepEnd = Math.min(sleepEndRaw, graphEnd);
-    const sleepWidth = sleepEnd - sleepStart;
-    
-    // VALIDATION: Only draw rectangle if width is positive
-    if (sleepWidth <= 0) {
-        console.warn("Sleep period width is negative or zero, skipping rectangle:", sleepWidth);
-        
-        // Still draw the start marker
-        g.append("line")
-            .attr("class", "sleep-marker")
-            .attr("x1", sleepStart)
-            .attr("x2", sleepStart)
-            .attr("y1", 0)
-            .attr("y2", height)
-            .style("stroke", "#4a90e2")
-            .style("stroke-width", 2)
-            .style("stroke-dasharray", "3,3");
-        
-        // Add sleep start label
-        g.append("text")
-            .attr("class", "sleep-label")
-            .attr("x", sleepStart)
-            .attr("y", -5)
-            .attr("text-anchor", "middle")
-            .style("font-size", "10px")
-            .style("fill", "#4a90e2")
-            .style("font-weight", "bold")
-            .text("Sleep Onset");
-        
-        return; // Exit early if we can't draw the rectangle
-    }
-    
-    // Add sleep period background
-    const sleepRect = g.append("rect")
-        .attr("class", "sleep-period")
-        .attr("x", sleepStart)
-        .attr("y", 0)
-        .attr("width", sleepWidth)
-        .attr("height", height)
-        .style("fill", "#4a90e2")
-        .style("opacity", 0.15)
-        .style("stroke", "#4a90e2")
-        .style("stroke-width", 1)
-        .style("stroke-dasharray", "5,5");
-    
-    // Add sleep period labels
-    const labelY = -5;
-    
-    // Sleep start label
-    g.append("text")
-        .attr("class", "sleep-label")
-        .attr("x", sleepStart)
-        .attr("y", labelY)
-        .attr("text-anchor", "middle")
-        .style("font-size", "10px")
-        .style("fill", "#4a90e2")
-        .style("font-weight", "bold")
-        .text("Sleep Onset");
-    
-    // Sleep end label - only show if within graph bounds
-    if (sleepEndRaw <= graphEnd) {
-        g.append("text")
-            .attr("class", "sleep-label")
-            .attr("x", sleepEnd)
-            .attr("y", labelY)
-            .attr("text-anchor", "middle")
-            .style("font-size", "10px")
-            .style("fill", "#4a90e2")
-            .style("font-weight", "bold")
-            .text("Wake Up");
-        
-        g.append("line")
-            .attr("class", "sleep-marker")
-            .attr("x1", sleepEnd)
-            .attr("x2", sleepEnd)
-            .attr("y1", 0)
-            .attr("y2", height)
-            .style("stroke", "#4a90e2")
-            .style("stroke-width", 2)
-            .style("stroke-dasharray", "3,3");
-    } else {
-        // Add indicator that sleep extends beyond graph
-        g.append("text")
-            .attr("class", "sleep-label")
-            .attr("x", graphEnd - 5)
-            .attr("y", labelY)
-            .attr("text-anchor", "end")
-            .style("font-size", "10px")
-            .style("fill", "#4a90e2")
-            .style("font-weight", "bold")
-            .text("Sleep continues →");
-    }
-    
-    // Add vertical lines for sleep start
-    g.append("line")
-        .attr("class", "sleep-marker")
-        .attr("x1", sleepStart)
-        .attr("x2", sleepStart)
-        .attr("y1", 0)
-        .attr("y2", height)
-        .style("stroke", "#4a90e2")
-        .style("stroke-width", 2)
-        .style("stroke-dasharray", "3,3");
-}
-
-// Calculate comprehensive statistics - FIXED VERSION
+// Calculate comprehensive statistics
 function calculateStats(processedData, sleepPeriod) {
     // Overall stats
     const avgHR = d3.mean(processedData, d => d.hr);
@@ -1807,154 +1818,6 @@ function calculateStats(processedData, sleepPeriod) {
             }
         } else {
             console.warn("No overlap between sleep period and available data");
-        }
-    }
-    
-    return {
-        overall: {
-            avgHR: avgHR,
-            maxHR: maxHR,
-            minHR: minHR,
-            duration: duration
-        },
-        sleep: sleepStats
-    };
-}
-
-
-// Add sleep annotation to the graph
-function addSleepAnnotation(g, sleepPeriod, xScale, yScale, height, hrData) {
-    const sleepStart = xScale(sleepPeriod.start);
-    
-    // Clamp sleep end to the graph bounds if it extends beyond available data
-    const graphEnd = xScale.range()[1]; // Get the maximum x position of the graph
-    const sleepEndRaw = xScale(sleepPeriod.end);
-    const sleepEnd = Math.min(sleepEndRaw, graphEnd);
-    const sleepWidth = sleepEnd - sleepStart;
-    
-    // Add sleep period background
-    const sleepRect = g.append("rect")
-        .attr("class", "sleep-period")
-        .attr("x", sleepStart)
-        .attr("y", 0)
-        .attr("width", sleepWidth)
-        .attr("height", height)
-        .style("fill", "#4a90e2")
-        .style("opacity", 0.15)
-        .style("stroke", "#4a90e2")
-        .style("stroke-width", 1)
-        .style("stroke-dasharray", "5,5");
-    
-    // Add sleep period labels
-    const labelY = -5;
-    
-    // Sleep start label
-    g.append("text")
-        .attr("class", "sleep-label")
-        .attr("x", sleepStart)
-        .attr("y", labelY)
-        .attr("text-anchor", "middle")
-        .style("font-size", "10px")
-        .style("fill", "#4a90e2")
-        .style("font-weight", "bold")
-        .text("Sleep Onset");
-    
-    // Sleep end label - only show if within graph bounds
-    if (sleepEndRaw <= graphEnd) {
-        g.append("text")
-            .attr("class", "sleep-label")
-            .attr("x", sleepEnd)
-            .attr("y", labelY)
-            .attr("text-anchor", "middle")
-            .style("font-size", "10px")
-            .style("fill", "#4a90e2")
-            .style("font-weight", "bold")
-            .text("Wake Up");
-        
-        g.append("line")
-            .attr("class", "sleep-marker")
-            .attr("x1", sleepEnd)
-            .attr("x2", sleepEnd)
-            .attr("y1", 0)
-            .attr("y2", height)
-            .style("stroke", "#4a90e2")
-            .style("stroke-width", 2)
-            .style("stroke-dasharray", "3,3");
-    } else {
-        // Add indicator that sleep extends beyond graph
-        g.append("text")
-            .attr("class", "sleep-label")
-            .attr("x", graphEnd - 5)
-            .attr("y", labelY)
-            .attr("text-anchor", "end")
-            .style("font-size", "10px")
-            .style("fill", "#4a90e2")
-            .style("font-weight", "bold")
-            .text("Sleep continues →");
-    }
-    
-    // Add vertical lines for sleep start and end
-    g.append("line")
-        .attr("class", "sleep-marker")
-        .attr("x1", sleepStart)
-        .attr("x2", sleepStart)
-        .attr("y1", 0)
-        .attr("y2", height)
-        .style("stroke", "#4a90e2")
-        .style("stroke-width", 2)
-        .style("stroke-dasharray", "3,3");
-    
-    g.append("line")
-        .attr("class", "sleep-marker")
-        .attr("x1", sleepStart)
-        .attr("x2", sleepStart)
-        .attr("y1", 0)
-        .attr("y2", height)
-        .style("stroke", "#4a90e2")
-        .style("stroke-width", 2)
-        .style("stroke-dasharray", "3,3");
-}
-
-// Calculate comprehensive statistics
-function calculateStats(processedData, sleepPeriod) {
-    // Overall stats
-    const avgHR = d3.mean(processedData, d => d.hr);
-    const maxHR = d3.max(processedData, d => d.hr);
-    const minHR = d3.min(processedData, d => d.hr);
-    const duration = processedData[processedData.length - 1].datetime - processedData[0].datetime;
-    
-    let sleepStats = null;
-    
-    // Sleep period stats - calculate even if sleep extends beyond available data
-    if (sleepPeriod) {
-        // Get data range
-        const dataStart = processedData[0].datetime;
-        const dataEnd = processedData[processedData.length - 1].datetime;
-        
-        // Determine effective sleep period within available data
-        const effectiveSleepStart = new Date(Math.max(sleepPeriod.start.getTime(), dataStart.getTime()));
-        const effectiveSleepEnd = new Date(Math.min(sleepPeriod.end.getTime(), dataEnd.getTime()));
-
-        // Only calculate stats if there's overlap between sleep period and available data
-        if (effectiveSleepStart < effectiveSleepEnd) {
-            const sleepData = processedData.filter(d => 
-                d.datetime >= effectiveSleepStart && d.datetime <= effectiveSleepEnd
-            );
-            
-            if (sleepData.length > 0) {
-                sleepStats = {
-                    avgHR: d3.mean(sleepData, d => d.hr),
-                    maxHR: d3.max(sleepData, d => d.hr),
-                    minHR: d3.min(sleepData, d => d.hr),
-                    totalSleepTime: sleepPeriod.totalSleepTime,
-                    efficiency: sleepPeriod.efficiency,
-                    dataPoints: sleepData.length,
-                    effectiveStart: effectiveSleepStart,
-                    effectiveEnd: effectiveSleepEnd,
-                    sleepExtendsBeforeData: sleepPeriod.start < dataStart,
-                    sleepExtendsBeyondData: sleepPeriod.end > dataEnd
-                };
-            }
         }
     }
     
@@ -2051,8 +1914,6 @@ function createParticipantNav() {
     const nav = d3.select("#participantNav");
     
     for (let i = 1; i <= 21; i++) {
-/*         if (i === 11) continue; // Skip User 11 as mentioned in the original code
- */        
         nav.append("div")
             .attr("class", "participant-circle")
             .attr("id", `user-${i}`)
@@ -2066,6 +1927,7 @@ function createParticipantNav() {
 createParticipantNav();
 loadParticipantData(1);
 
+// ============= DASHBOARD FUNCTIONALITY =============
 
 let sleepData = [];
 let filteredData = [];
@@ -2111,1279 +1973,507 @@ Promise.all([
     initCharts();
 });
 
-        // filteredData = [...sleepData];
-        // initCharts();
-        // });
+// Chart dimensions
+const margin = {top: 20, right: 30, bottom: 40, left: 50};
+const chartWidth = 400 - margin.left - margin.right;
+const chartHeight = 300 - margin.top - margin.bottom;
 
-        // let filteredData = [...sleepData];
-        
-        // Chart dimensions
-        const margin = {top: 20, right: 30, bottom: 40, left: 50};
-        const chartWidth = 400 - margin.left - margin.right;
-        const chartHeight = 300 - margin.top - margin.bottom;
-        
-        // Color scales
-        const stressColorScale = d3.scaleSequential(d3.interpolateReds).domain([1, 50]);
-        const ageColorScale = d3.scaleSequential(d3.interpolateBlues).domain([20, 80]);
-        
-        // Tooltip
-        const tooltip = d3.select("#tooltip");
-        
-        // Initialize charts
-        // function initCharts() {
-        //     createEfficiencyChart();
-        //     createWASOChart();
-        //     createLatencyChart();
-        //     createAwakeningsChart();
-        //     updateMetrics();
-        // }
-        function initCharts() {
-            createEfficiencyChart();
-            createWASOChart();
-            createLatencyChart();
-            createAwakeningsChart();
-            createCaffeineChart();
-            createMovementChart();
-            createScreenChart();
-            updateMetrics();
-        }
-        
-        function createEfficiencyChart() {
-            const svg = d3.select("#efficiency-chart");
-            svg.selectAll("*").remove();
-            
-            const g = svg.append("g")
-                .attr("transform", `translate(${margin.left},${margin.top})`);
-            
-            const xScale = d3.scaleLinear()
-                .domain([4, 12])
-                .range([0, chartWidth]);
-            
-            const yScale = d3.scaleLinear()
-                .domain([50, 100])
-                .range([chartHeight, 0]);
-            
-            // Axes
-            g.append("g")
-                .attr("class", "axis")
-                .attr("transform", `translate(0,${chartHeight})`)
-                .call(d3.axisBottom(xScale));
-            
-            g.append("g")
-                .attr("class", "axis")
-                .call(d3.axisLeft(yScale));
-            
-            // Axis labels
-            g.append("text")
-                .attr("class", "axis-label")
-                .attr("transform", `translate(${chartWidth/2}, ${chartHeight + 35})`)
-                .style("text-anchor", "middle")
-                .text("Sleep Duration (hours)");
-            
-            g.append("text")
-                .attr("class", "axis-label")
-                .attr("transform", "rotate(-90)")
-                .attr("y", 0 - margin.left)
-                .attr("x", 0 - (chartHeight / 2))
-                .attr("dy", "1em")
-                .style("text-anchor", "middle")
-                .text("Sleep Efficiency (%)");
-            
-            updateEfficiencyChart(g, xScale, yScale);
-        }
-        
-        function updateEfficiencyChart(g, xScale, yScale) {
-            const dots = g.selectAll(".dot")
-                .data(filteredData, d => d.id);
-            
-            dots.enter()
-                .append("circle")
-                .attr("class", "dot")
-                .attr("r", 4)
-                .merge(dots)
-                .transition()
-                .duration(300)
-                .attr("cx", d => xScale(d.sleepDuration))
-                .attr("cy", d => yScale(d.efficiency))
-                .attr("fill", d => stressColorScale(d.stress));
-            
-            dots.exit().remove();
-            
-            g.selectAll(".dot")
-                .on("mouseover", (event, d) => {
-                    tooltip.style("opacity", 1)
-                        .html(`Duration: ${d.sleepDuration}h<br/>Efficiency: ${d.efficiency}%<br/>Stress: ${d.stress}<br/>Age: ${d.age}`)
-                        .style("left", (event.pageX + 10) + "px")
-                        .style("top", (event.pageY - 10) + "px");
-                })
-                .on("mouseout", () => {
-                    tooltip.style("opacity", 0);
-                });
-        }
-        
-        function createWASOChart() {
-            const svg = d3.select("#waso-chart");
-            svg.selectAll("*").remove();
-            
-            const g = svg.append("g")
-                .attr("transform", `translate(${margin.left},${margin.top})`);
-            
-            // Group data by stress ranges
-            const stressBins = d3.range(0, 51, 5);
-            const binData = stressBins.map(bin => {
-                const inBin = filteredData.filter(d => d.stress >= bin && d.stress < bin + 5);
-                return {
-                    stress: bin + 2.5,
-                    avgWASO: d3.mean(inBin, d => d.waso) || 0,
-                    count: inBin.length
-                };
-            }).filter(d => d.count > 0);
-            
-            const xScale = d3.scaleBand()
-                .domain(binData.map(d => d.stress))
-                .range([0, chartWidth])
-                .padding(0.1);
-            
-            const yScale = d3.scaleLinear()
-                .domain([0, d3.max(binData, d => d.avgWASO) || 50])
-                .range([chartHeight, 0]);
-            
-            // Axes
-            g.append("g")
-                .attr("class", "axis")
-                .attr("transform", `translate(0,${chartHeight})`)
-                .call(d3.axisBottom(xScale).tickFormat(d => Math.round(d)));
-            
-            g.append("g")
-                .attr("class", "axis")
-                .call(d3.axisLeft(yScale));
-            
-            // Axis labels
-            g.append("text")
-                .attr("class", "axis-label")
-                .attr("transform", `translate(${chartWidth/2}, ${chartHeight + 35})`)
-                .style("text-anchor", "middle")
-                .text("Stress Level");
-            
-            g.append("text")
-                .attr("class", "axis-label")
-                .attr("transform", "rotate(-90)")
-                .attr("y", 0 - margin.left)
-                .attr("x", 0 - (chartHeight / 2))
-                .attr("dy", "1em")
-                .style("text-anchor", "middle")
-                .text("Average WASO (min)");
-            
-            // Bars
-            g.selectAll(".bar")
-                .data(binData)
-                .enter()
-                .append("rect")
-                .attr("class", "bar")
-                .attr("x", d => xScale(d.stress))
-                .attr("width", xScale.bandwidth())
-                .attr("y", d => yScale(d.avgWASO))
-                .attr("height", d => chartHeight - yScale(d.avgWASO))
-                .attr("fill", "#ff6b6b")
-                .on("mouseover", (event, d) => {
-                    tooltip.style("opacity", 1)
-                        .html(`Stress: ${Math.round(d.stress)}<br/>Avg WASO: ${d.avgWASO.toFixed(1)} min<br/>Count: ${d.count}`)
-                        .style("left", (event.pageX + 10) + "px")
-                        .style("top", (event.pageY - 10) + "px");
-                })
-                .on("mouseout", () => {
-                    tooltip.style("opacity", 0);
-                });
-        }
-        
-        function createLatencyChart() {
-            const svg = d3.select("#latency-chart");
-            svg.selectAll("*").remove();
-            
-            const g = svg.append("g")
-                .attr("transform", `translate(${margin.left},${margin.top})`);
-            
-            const bins = d3.histogram()
-                .value(d => d.latency)
-                .domain([0, 30])
-                .thresholds(15)(filteredData);
-            
-            const xScale = d3.scaleLinear()
-                .domain([0, 30])
-                .range([0, chartWidth]);
-            
-            const yScale = d3.scaleLinear()
-                .domain([0, d3.max(bins, d => d.length)])
-                .range([chartHeight, 0]);
-            
-            // Axes
-            g.append("g")
-                .attr("class", "axis")
-                .attr("transform", `translate(0,${chartHeight})`)
-                .call(d3.axisBottom(xScale));
-            
-            g.append("g")
-                .attr("class", "axis")
-                .call(d3.axisLeft(yScale));
-            
-            // Axis labels
-            g.append("text")
-                .attr("class", "axis-label")
-                .attr("transform", `translate(${chartWidth/2}, ${chartHeight + 35})`)
-                .style("text-anchor", "middle")
-                .text("Sleep Latency (min)");
-            
-            g.append("text")
-                .attr("class", "axis-label")
-                .attr("transform", "rotate(-90)")
-                .attr("y", 0 - margin.left)
-                .attr("x", 0 - (chartHeight / 2))
-                .attr("dy", "1em")
-                .style("text-anchor", "middle")
-                .text("Frequency");
-            
-            // Bars
-            g.selectAll(".bar")
-                .data(bins)
-                .enter()
-                .append("rect")
-                .attr("class", "bar")
-                .attr("x", d => xScale(d.x0))
-                .attr("width", d => xScale(d.x1) - xScale(d.x0) - 1)
-                .attr("y", d => yScale(d.length))
-                .attr("height", d => chartHeight - yScale(d.length))
-                .attr("fill", "#4ecdc4");
-        }
-        
-        function createAwakeningsChart() {
-            const svg = d3.select("#awakenings-chart");
-            svg.selectAll("*").remove();
-            
-            const g = svg.append("g")
-                .attr("transform", `translate(${margin.left},${margin.top})`);
-            
-            const xScale = d3.scaleLinear()
-                .domain([20, 80])
-                .range([0, chartWidth]);
-            
-            const yScale = d3.scaleLinear()
-                .domain([0, d3.max(filteredData, d => d.awakenings) + 1])
-                .range([chartHeight, 0]);
-            
-            // Axes
-            g.append("g")
-                .attr("class", "axis")
-                .attr("transform", `translate(0,${chartHeight})`)
-                .call(d3.axisBottom(xScale));
-            
-            g.append("g")
-                .attr("class", "axis")
-                .call(d3.axisLeft(yScale));
-            
-            // Axis labels
-            g.append("text")
-                .attr("class", "axis-label")
-                .attr("transform", `translate(${chartWidth/2}, ${chartHeight + 35})`)
-                .style("text-anchor", "middle")
-                .text("Age");
-            
-            g.append("text")
-                .attr("class", "axis-label")
-                .attr("transform", "rotate(-90)")
-                .attr("y", 0 - margin.left)
-                .attr("x", 0 - (chartHeight / 2))
-                .attr("dy", "1em")
-                .style("text-anchor", "middle")
-                .text("Number of Awakenings");
-            
-            // Dots
-            g.selectAll(".dot")
-                .data(filteredData)
-                .enter()
-                .append("circle")
-                .attr("class", "dot")
-                .attr("cx", d => xScale(d.age))
-                .attr("cy", d => yScale(d.awakenings))
-                .attr("r", 3)
-                .attr("fill", d => ageColorScale(d.age))
-                .on("mouseover", (event, d) => {
-                    tooltip.style("opacity", 1)
-                        .html(`Age: ${d.age}<br/>Awakenings: ${d.awakenings}<br/>Sleep Duration: ${d.sleepDuration}h`)
-                        .style("left", (event.pageX + 10) + "px")
-                        .style("top", (event.pageY - 10) + "px");
-                })
-                .on("mouseout", () => {
-                    tooltip.style("opacity", 0);
-                });
-        }
+// Color scales
+const stressColorScale = d3.scaleSequential(d3.interpolateReds).domain([1, 50]);
+const ageColorScale = d3.scaleSequential(d3.interpolateBlues).domain([20, 80]);
 
-        function createCaffeineChart() {
-            const svg = d3.select("#caffeine-chart");
-            svg.selectAll("*").remove();
-            
-            const g = svg.append("g")
-                .attr("transform", `translate(${margin.left},${margin.top})`);
-            
-            const xScale = d3.scaleLinear()
-                .domain([0, d3.max(filteredData, d => d.caffeineEvents) || 10])
-                .range([0, chartWidth]);
-            
-            const yScale = d3.scaleLinear()
-                .domain([d3.min(filteredData, d => d.efficiency) - 5, d3.max(filteredData, d => d.efficiency) + 5])
-                .range([chartHeight, 0]);
-            
-            // Axes
-            g.append("g")
-                .attr("class", "axis")
-                .attr("transform", `translate(0,${chartHeight})`)
-                .call(d3.axisBottom(xScale));
-            
-            g.append("g")
-                .attr("class", "axis")
-                .call(d3.axisLeft(yScale));
-            
-            // Axis labels
-            g.append("text")
-                .attr("class", "axis-label")
-                .attr("transform", `translate(${chartWidth/2}, ${chartHeight + 35})`)
-                .style("text-anchor", "middle")
-                .text("Caffeine Events per Day");
-            
-            g.append("text")
-                .attr("class", "axis-label")
-                .attr("transform", "rotate(-90)")
-                .attr("y", 0 - margin.left)
-                .attr("x", 0 - (chartHeight / 2))
-                .attr("dy", "1em")
-                .style("text-anchor", "middle")
-                .text("Sleep Efficiency (%)");
-            
-            // Dots
-            g.selectAll(".dot")
-                .data(filteredData)
-                .enter()
-                .append("circle")
-                .attr("class", "dot")
-                .attr("cx", d => xScale(d.caffeineEvents))
-                .attr("cy", d => yScale(d.efficiency))
-                .attr("r", 4)
-                .attr("fill", "#e74c3c")
-                .on("mouseover", (event, d) => {
-                    tooltip.style("opacity", 1)
-                        .html(`Caffeine: ${d.caffeineEvents} events<br/>Efficiency: ${d.efficiency}%<br/>ID: ${d.id}`)
-                        .style("left", (event.pageX + 10) + "px")
-                        .style("top", (event.pageY - 10) + "px");
-                })
-                .on("mouseout", () => {
-                    tooltip.style("opacity", 0);
-                });
-        }
-        
-        function createMovementChart() {
-            const svg = d3.select("#movement-chart");
-            svg.selectAll("*").remove();
-            
-            const g = svg.append("g")
-                .attr("transform", `translate(${margin.left},${margin.top})`);
-            
-            const movementType = d3.select("#movement-select").property("value");
-            const movementKey = `movement${movementType.charAt(0).toUpperCase() + movementType.slice(1)}`;
-            
-            const xScale = d3.scaleLinear()
-                .domain([0, d3.max(filteredData, d => d[movementKey]) || 200])
-                .range([0, chartWidth]);
-            
-            const yScale = d3.scaleLinear()
-                .domain([0, d3.max(filteredData, d => d.latency) + 5])
-                .range([chartHeight, 0]);
-            
-            // Axes
-            g.append("g")
-                .attr("class", "axis")
-                .attr("transform", `translate(0,${chartHeight})`)
-                .call(d3.axisBottom(xScale));
-            
-            g.append("g")
-                .attr("class", "axis")
-                .call(d3.axisLeft(yScale));
-            
-            // Axis labels
-            g.append("text")
-                .attr("class", "axis-label")
-                .attr("transform", `translate(${chartWidth/2}, ${chartHeight + 35})`)
-                .style("text-anchor", "middle")
-                .text(`${movementType.charAt(0).toUpperCase() + movementType.slice(1)} Movement (min)`);
-            
-            g.append("text")
-                .attr("class", "axis-label")
-                .attr("transform", "rotate(-90)")
-                .attr("y", 0 - margin.left)
-                .attr("x", 0 - (chartHeight / 2))
-                .attr("dy", "1em")
-                .style("text-anchor", "middle")
-                .text("Sleep Latency (min)");
-            
-            // Dots
-            g.selectAll(".dot")
-                .data(filteredData)
-                .enter()
-                .append("circle")
-                .attr("class", "dot")
-                .attr("cx", d => xScale(d[movementKey]))
-                .attr("cy", d => yScale(d.latency))
-                .attr("r", 4)
-                .attr("fill", "#3498db")
-                .on("mouseover", (event, d) => {
-                    tooltip.style("opacity", 1)
-                        .html(`${movementType} Movement: ${d[movementKey]} min<br/>Latency: ${d.latency} min<br/>ID: ${d.id}`)
-                        .style("left", (event.pageX + 10) + "px")
-                        .style("top", (event.pageY - 10) + "px");
-                })
-                .on("mouseout", () => {
-                    tooltip.style("opacity", 0);
-                });
-        }
-        
-        function createScreenChart() {
-            const svg = d3.select("#screen-chart");
-            svg.selectAll("*").remove();
-            
-            const g = svg.append("g")
-                .attr("transform", `translate(${margin.left},${margin.top})`);
-            
-            const screenType = d3.select("#screen-select").property("value");
-            const screenKey = `screen${screenType.charAt(0).toUpperCase() + screenType.slice(1)}`;
-            
-            const xScale = d3.scaleLinear()
-                .domain([0, d3.max(filteredData, d => d[screenKey]) || 200])
-                .range([0, chartWidth]);
-            
-            const yScale = d3.scaleLinear()
-                .domain([0, d3.max(filteredData, d => d.waso) + 10])
-                .range([chartHeight, 0]);
-            
-            // Axes
-            g.append("g")
-                .attr("class", "axis")
-                .attr("transform", `translate(0,${chartHeight})`)
-                .call(d3.axisBottom(xScale));
-            
-            g.append("g")
-                .attr("class", "axis")
-                .call(d3.axisLeft(yScale));
-            
-            // Axis labels
-            g.append("text")
-                .attr("class", "axis-label")
-                .attr("transform", `translate(${chartWidth/2}, ${chartHeight + 35})`)
-                .style("text-anchor", "middle")
-                .text(`${screenType.charAt(0).toUpperCase() + screenType.slice(1)} Screen Time (min)`);
-            
-            g.append("text")
-                .attr("class", "axis-label")
-                .attr("transform", "rotate(-90)")
-                .attr("y", 0 - margin.left)
-                .attr("x", 0 - (chartHeight / 2))
-                .attr("dy", "1em")
-                .style("text-anchor", "middle")
-                .text("WASO (min)");
-            
-            // Dots
-            g.selectAll(".dot")
-                .data(filteredData)
-                .enter()
-                .append("circle")
-                .attr("class", "dot")
-                .attr("cx", d => xScale(d[screenKey]))
-                .attr("cy", d => yScale(d.waso))
-                .attr("r", 4)
-                .attr("fill", "#9b59b6")
-                .on("mouseover", (event, d) => {
-                    tooltip.style("opacity", 1)
-                        .html(`${screenType} Screen: ${d[screenKey]} min<br/>WASO: ${d.waso} min<br/>ID: ${d.id}`)
-                        .style("left", (event.pageX + 10) + "px")
-                        .style("top", (event.pageY - 10) + "px");
-                })
-                .on("mouseout", () => {
-                    tooltip.style("opacity", 0);
-                });
-        }
-        
-        function updateMetrics() {
-            const avgEfficiency = d3.mean(filteredData, d => d.efficiency);
-            const avgWASO = d3.mean(filteredData, d => d.waso);
-            const avgLatency = d3.mean(filteredData, d => d.latency);
-            
-            d3.select("#avg-efficiency").text(avgEfficiency ? avgEfficiency.toFixed(1) + "%" : "--");
-            d3.select("#avg-waso").text(avgWASO ? avgWASO.toFixed(1) : "--");
-            d3.select("#avg-latency").text(avgLatency ? avgLatency.toFixed(1) : "--");
-        }
-        
-        function filterData() {
-            const durationValue = +d3.select("#duration-slider").property("value");
-            const stressValue = +d3.select("#stress-slider").property("value");
-            const ageValue = +d3.select("#age-slider").property("value");
-            const activityValue = +d3.select("#activity-slider").property("value");
+// Tooltip
+const tooltip = d3.select("#tooltip");
 
-            // Initial filtering with moderate thresholds
-            filteredData = sleepData.filter(d => {
-            return Math.abs(d.age - ageValue) <= 15 &&
-               Math.abs(d.activityLevel - activityValue) <= 500;
-             });
-
-            // If too few points, expand criteria
-            if (filteredData.length < 20) {
-                 filteredData = sleepData.filter(d => {
-            return Math.abs(d.sleepDuration - durationValue) <= 2 &&
-                   Math.abs(d.stress - stressValue) <= 20 &&
-                   Math.abs(d.age - ageValue) <= 15 &&
-                   Math.abs(d.activityLevel - activityValue) <= 1000; // based on your CSV
-             });
-            }
-        
-            
-            // Update metrics
-            updateMetrics();
-            
-            // Update all charts with filtered data
-            updateAllCharts();
-
-        }
-        
-        function updateAllCharts() {
-            // Recreate charts with filtered data
-            createWASOChart();
-            createLatencyChart();
-            createAwakeningsChart();
-            createCaffeineChart();
-            createMovementChart();
-            createScreenChart();
-            
-            // Update efficiency chart dots
-            const svg = d3.select("#efficiency-chart");
-            const g = svg.select("g");
-            const xScale = d3.scaleLinear().domain([4, 12]).range([0, chartWidth]);
-            const yScale = d3.scaleLinear().domain([50, 100]).range([chartHeight, 0]);
-            updateEfficiencyChart(g, xScale, yScale);
-        }
-        
-        // Event listeners
-        d3.select("#duration-slider").on("input", function() {
-            d3.select("#duration-value").text(this.value + "h");
-            filterData();
-        });
-        
-        d3.select("#stress-slider").on("input", function() {
-            d3.select("#stress-value").text(this.value);
-            filterData();
-        });
-        
-        d3.select("#age-slider").on("input", function() {
-            d3.select("#age-value").text(this.value);
-            filterData();
-        });
-        
-        d3.select("#activity-slider").on("input", function() {
-            d3.select("#activity-value").text(this.value);
-            filterData();
-        });
-
-        // Activity section event listeners
-        d3.select("#caffeine-slider").on("input", function() {
-            d3.select("#caffeine-value").text(this.value);
-            createCaffeineChart();
-        });
-
-        d3.select("#movement-select").on("change", function() {
-            createMovementChart();
-        });
-
-        d3.select("#screen-select").on("change", function() {
-            createScreenChart();
-        });
-        
-        // Initialize
-        initCharts();
-
-const infoSections = [
-    {
-        title: "How This Works & Why It Matters",
-        type: "overview",
-        content: {
-        features: [
-          
-            {
-                title: "Real Science",
-                description: "Based on actual data from 21 participants aged 20-40 who underwent comprehensive 24-hour sleep monitoring. Understand your sleep latency, fragmentation, and quality using validated scientific instruments."
-            }
-        ]
-    }
-    },
-    {
-        title: "The Science Behind Sleep Research",
-        type: "science",
-        content: {
-            intro: "The MMASH study measured real sleep parameters that most people never get to see:",
-            biomarkers: [
-                {
-                    title: "Sleep Latency",
-                    description: "How long it takes to fall asleep. Research shows latency >30 minutes indicates potential sleep disorders or poor sleep hygiene."
-                },
-                {
-                    title: "Sleep Fragmentation",
-                    description: "Number of awakenings per night. Frequent awakenings reduce deep sleep phases critical for recovery and memory consolidation."
-                },
-                {
-                    title: "Sleep Efficiency",
-                    description: "Percentage of time actually sleeping while in bed. Healthy adults typically achieve 85%+ efficiency."
-                }
-            ]
-        }
-    },
-    {
-        title: "The MMASH Study",
-        type: "study",
-        content: {
-            intro: "This tool uses data from a comprehensive sleep study that collected:",
-            features: [
-                {
-                    title: "Sleep Monitoring",
-                    description: "24-hour actigraphy data measuring sleep duration, efficiency, and fragmentation patterns"
-                },
-                {
-                    title: "Stress Assessment",
-                    description: "Daily Stress Inventory (DSI) scores measuring perceived stress and life events"
-                },
-                {
-                    title: "Sleep Quality",
-                    description: "Pittsburgh Sleep Quality Index (PSQI) - the clinical standard for sleep assessment"
-                },
-                {
-                    title: "Chronotype Analysis",
-                    description: "Morningness-Eveningness Questionnaire (MEQ) determining natural sleep timing preferences"
-                }
-            ],
-            conclusion: "Result: You get matched with participants who have similar sleep patterns and validated scientific measurements."
-        }
-    }
-];
-
-// Real MMASH participant data
-const participants = [
-    {id: "user_1", age: 29, gender: "M", sleepHours: 3.3, stressScore: 23, sleepLatency: 0, nightAwakenings: 9, meqScore: 47, psqi: 5, efficiency: 92.0},
-    {id: "user_2", age: 27, gender: "M", sleepHours: 4.1, stressScore: 26, sleepLatency: 4, nightAwakenings: 18, meqScore: 52, psqi: 7, efficiency: 73.5},
-    {id: "user_3", age: 34, gender: "M", sleepHours: 5.8, stressScore: 11, sleepLatency: 3, nightAwakenings: 16, meqScore: 59, psqi: 8, efficiency: 79.2},
-    {id: "user_4", age: 27, gender: "M", sleepHours: 5.3, stressScore: 10, sleepLatency: 4, nightAwakenings: 28, meqScore: 60, psqi: 4, efficiency: 85.5},
-    {id: "user_5", age: 25, gender: "M", sleepHours: 5.8, stressScore: 41, sleepLatency: 0, nightAwakenings: 21, meqScore: 52, psqi: 8, efficiency: 85.7},
-    {id: "user_6", age: 26, gender: "M", sleepHours: 7.1, stressScore: 74, sleepLatency: 4, nightAwakenings: 20, meqScore: 38, psqi: 9, efficiency: 88.8},
-    {id: "user_7", age: 23, gender: "M", sleepHours: 4.5, stressScore: 28, sleepLatency: 2, nightAwakenings: 17, meqScore: 44, psqi: 6, efficiency: 81.8},
-    {id: "user_8", age: 26, gender: "M", sleepHours: 4.5, stressScore: 23, sleepLatency: 1, nightAwakenings: 11, meqScore: 50, psqi: 4, efficiency: 81.8},
-    {id: "user_9", age: 23, gender: "M", sleepHours: 6.8, stressScore: 42, sleepLatency: 2, nightAwakenings: 19, meqScore: 64, psqi: 4, efficiency: 91.9},
-    {id: "user_10", age: 24, gender: "M", sleepHours: 4.7, stressScore: 35, sleepLatency: 2, nightAwakenings: 16, meqScore: 48, psqi: 6, efficiency: 85.5},
-    {id: "user_12", age: 25, gender: "M", sleepHours: 4.4, stressScore: 35, sleepLatency: 1, nightAwakenings: 24, meqScore: 46, psqi: 6, efficiency: 78.6},
-    {id: "user_13", age: 30, gender: "M", sleepHours: 6.4, stressScore: 37, sleepLatency: 2, nightAwakenings: 12, meqScore: 60, psqi: 3, efficiency: 91.4},
-    {id: "user_14", age: 26, gender: "M", sleepHours: 7.4, stressScore: 49, sleepLatency: 2, nightAwakenings: 4, meqScore: 44, psqi: 2, efficiency: 92.5},
-    {id: "user_15", age: 24, gender: "M", sleepHours: 6.2, stressScore: 56, sleepLatency: 3, nightAwakenings: 13, meqScore: 42, psqi: 5, efficiency: 88.6},
-    {id: "user_16", age: 26, gender: "M", sleepHours: 9.6, stressScore: 32, sleepLatency: 1, nightAwakenings: 44, meqScore: 46, psqi: 6, efficiency: 85.7},
-    {id: "user_17", age: 40, gender: "M", sleepHours: 5.3, stressScore: 29, sleepLatency: 2, nightAwakenings: 21, meqScore: 53, psqi: 3, efficiency: 88.3},
-    {id: "user_18", age: 27, gender: "M", sleepHours: 5.5, stressScore: 21, sleepLatency: 1, nightAwakenings: 19, meqScore: 52, psqi: 4, efficiency: 91.7},
-    {id: "user_19", age: 25, gender: "M", sleepHours: 4.7, stressScore: 34, sleepLatency: 1, nightAwakenings: 18, meqScore: 58, psqi: 7, efficiency: 78.3},
-    {id: "user_20", age: 26, gender: "M", sleepHours: 6.0, stressScore: 31, sleepLatency: 0, nightAwakenings: 18, meqScore: 53, psqi: 4, efficiency: 92.3},
-    {id: "user_21", age: 26, gender: "M", sleepHours: 5.7, stressScore: 43, sleepLatency: 1, nightAwakenings: 22, meqScore: 49, psqi: 6, efficiency: 87.7},
-    {id: "user_22", age: 26, gender: "M", sleepHours: 4.9, stressScore: 21, sleepLatency: 2, nightAwakenings: 12, meqScore: 49, psqi: 6, efficiency: 81.7}
-];
-
-class InfoController {
-    constructor() {
-        this.currentSection = 0;
-        this.autoAdvanceEnabled = true;
-        this.autoAdvanceTimer = null;
-        this.init();
-    }
-
-    init() {
-        this.renderCurrentSection();
-        this.setupEventListeners();
-        this.startAutoAdvance();
-    }
-
-    setupEventListeners() {
-        document.getElementById('prevBtn').addEventListener('click', () => this.goToPrevious());
-        document.getElementById('nextBtn').addEventListener('click', () => this.goToNext());
-        document.getElementById('skipBtn').addEventListener('click', () => this.skipToQuiz());
-        
-        const autoAdvanceCheckbox = document.getElementById('autoAdvance');
-        autoAdvanceCheckbox.addEventListener('change', (e) => {
-            this.autoAdvanceEnabled = e.target.checked;
-            if (this.autoAdvanceEnabled) {
-                this.startAutoAdvance();
-            } else {
-                this.stopAutoAdvance();
-            }
-        });
-    }
-
-    renderCurrentSection() {
-        const section = infoSections[this.currentSection];
-        const content = document.getElementById('infoContent');
-        
-        content.innerHTML = '';
-        
-        const title = document.createElement('h2');
-        title.className = 'info-title';
-        title.textContent = section.title;
-        content.appendChild(title);
-
-        switch (section.type) {
-            case 'overview':
-                this.renderOverview(content, section.content);
-                break;
-            case 'science':
-                this.renderScience(content, section.content);
-                break;
-            case 'study':
-                this.renderStudy(content, section.content);
-                break;
-            case 'benefits':
-                this.renderBenefits(content, section.content);
-                break;
-        }
-
-        this.updateProgressDots();
-        this.updateNavigationButtons();
-        this.animateContent();
-    }
-
-    renderOverview(container, content) {
-        const grid = document.createElement('div');
-        grid.className = 'feature-grid';
-        
-        content.features.forEach((feature) => {
-            const card = document.createElement('div');
-            card.className = 'feature-card';
-            card.innerHTML = `
-                <h4>${feature.title}</h4>
-                <p>${feature.description}</p>
-            `;
-            grid.appendChild(card);
-        });
-        
-        container.appendChild(grid);
-    }
-
-    renderScience(container, content) {
-        const intro = document.createElement('p');
-        intro.style.marginBottom = '20px';
-        intro.innerHTML = `<strong>${content.intro}</strong>`;
-        container.appendChild(intro);
-
-        const section = document.createElement('div');
-        section.className = 'science-section';
-        
-        content.biomarkers.forEach((biomarker) => {
-            const item = document.createElement('div');
-            item.className = 'biomarker-item';
-            item.innerHTML = `
-                <h5>${biomarker.title}</h5>
-                <p>${biomarker.description}</p>
-            `;
-            section.appendChild(item);
-        });
-        
-        container.appendChild(section);
-    }
-
-    renderStudy(container, content) {
-        const intro = document.createElement('p');
-        intro.style.marginBottom = '20px';
-        intro.innerHTML = `<strong>${content.intro}</strong>`;
-        container.appendChild(intro);
-
-        const grid = document.createElement('div');
-        grid.className = 'feature-grid';
-        
-        content.features.forEach((feature) => {
-            const card = document.createElement('div');
-            card.className = 'feature-card';
-            card.innerHTML = `
-                <h4>${feature.title}</h4>
-                <p>${feature.description}</p>
-            `;
-            grid.appendChild(card);
-        });
-        
-        container.appendChild(grid);
-
-        const conclusion = document.createElement('p');
-        conclusion.style.marginTop = '20px';
-        conclusion.style.fontWeight = '500';
-        conclusion.innerHTML = `<strong>${content.conclusion}</strong>`;
-        container.appendChild(conclusion);
-    }
-
-    renderBenefits(container, content) {
-        const section = document.createElement('div');
-        section.className = 'science-section';
-        
-        content.benefits.forEach((benefit) => {
-            const item = document.createElement('div');
-            item.className = 'biomarker-item';
-            item.style.background = '#fef3c7';
-            item.style.borderColor = '#fbbf24';
-            item.innerHTML = `
-                <h5 style="color: #92400e;">${benefit.title}</h5>
-                <p style="color: #78350f;">${benefit.description}</p>
-            `;
-            section.appendChild(item);
-        });
-        
-        container.appendChild(section);
-    }
-
-    animateContent() {
-        const cards = document.querySelectorAll('.feature-card');
-        cards.forEach((card, index) => {
-            setTimeout(() => {
-                card.classList.add('animate');
-            }, index * 150);
-        });
-
-        const items = document.querySelectorAll('.biomarker-item');
-        items.forEach((item, index) => {
-            setTimeout(() => {
-                item.classList.add('animate');
-            }, index * 200);
-        });
-    }
-
-    updateProgressDots() {
-        const dots = document.querySelectorAll('.progress-dot');
-        dots.forEach((dot, index) => {
-            dot.classList.toggle('active', index === this.currentSection);
-        });
-    }
-
-    updateNavigationButtons() {
-        document.getElementById('prevBtn').disabled = this.currentSection === 0;
-        document.getElementById('nextBtn').textContent = 
-            this.currentSection === infoSections.length - 1 ? 'Start Quiz' : 'Next';
-    }
-
-    goToPrevious() {
-        if (this.currentSection > 0) {
-            this.currentSection--;
-            this.renderCurrentSection();
-            this.restartAutoAdvance();
-        }
-    }
-
-    goToNext() {
-        if (this.currentSection < infoSections.length - 1) {
-            this.currentSection++;
-            this.renderCurrentSection();
-            this.restartAutoAdvance();
-        } else {
-            this.skipToQuiz();
-        }
-    }
-
-    skipToQuiz() {
-        this.stopAutoAdvance();
-        document.getElementById('interactiveInfo').style.display = 'none';
-        document.getElementById('quizSection').classList.add('show');
-        initializePredictions();
-    }
-
-    startAutoAdvance() {
-        if (!this.autoAdvanceEnabled) return;
-        
-        this.autoAdvanceTimer = setTimeout(() => {
-            if (this.currentSection < infoSections.length - 1) {
-                this.goToNext();
-            }
-        }, 8000);
-    }
-
-    stopAutoAdvance() {
-        if (this.autoAdvanceTimer) {
-            clearTimeout(this.autoAdvanceTimer);
-            this.autoAdvanceTimer = null;
-        }
-    }
-
-    restartAutoAdvance() {
-        this.stopAutoAdvance();
-        this.startAutoAdvance();
-    }
+function initCharts() {
+    createEfficiencyChart();
+    createWASOChart();
+    createLatencyChart();
+    createAwakeningsChart();
+    createCaffeineChart();
+    createMovementChart();
+    createScreenChart();
+    updateMetrics();
 }
 
-class QuizController {
-    constructor() {
-        this.currentQuestion = 1;
-        this.totalQuestions = 6;
-        this.answers = {};
-        this.init();
-    }
-
-    init() {
-        this.setupEventListeners();
-        this.updateProgress();
-        this.updateQuestionCounter();
-        this.showQuestion(1); // Show first question
-    }
-
-    setupEventListeners() {
-        // Navigation buttons
-        document.getElementById('nextQuestion').addEventListener('click', () => {
-            console.log('Next clicked on question', this.currentQuestion);
-            this.nextQuestion();
-        });
-        
-        document.getElementById('prevQuestion').addEventListener('click', () => {
-            console.log('Prev clicked on question', this.currentQuestion);
-            this.prevQuestion();
-        });
-
-        // Slider updates
-        document.getElementById('age').addEventListener('input', function() {
-            document.getElementById('ageValue').textContent = this.value + ' years';
-        });
-
-        document.getElementById('sleepHours').addEventListener('input', function() {
-            document.getElementById('sleepHoursValue').textContent = this.value + ' hours';
-        });
-
-        document.getElementById('sleepLatency').addEventListener('input', function() {
-            document.getElementById('sleepLatencyValue').textContent = this.value + ' minutes';
-        });
-
-        document.getElementById('nightAwakenings').addEventListener('input', function() {
-            document.getElementById('nightAwakeningsValue').textContent = this.value + ' times';
-        });
-    }
-
-    nextQuestion() {
-        // Save current answer first
-        this.saveCurrentAnswer();
-        
-        // Simple validation only for required questions
-        if (this.currentQuestion === 3) {
-            if (!document.querySelector('input[name="stress"]:checked')) {
-                alert('Please select your stress level');
-                return;
-            }
-        }
-        
-        if (this.currentQuestion === 6) {
-            if (!document.querySelector('input[name="chronotype"]:checked')) {
-                alert('Please select your chronotype');
-                return;
-            }
-        }
-
-        // Move to next question or submit
-        if (this.currentQuestion < this.totalQuestions) {
-            this.currentQuestion++;
-            this.showQuestion(this.currentQuestion);
-            this.updateProgress();
-            this.updateQuestionCounter();
-            this.updateNavigationButtons();
-        } else {
-            this.submitQuiz();
-        }
-    }
-
-    prevQuestion() {
-        if (this.currentQuestion > 1) {
-            this.currentQuestion--;
-            this.showQuestion(this.currentQuestion);
-            this.updateProgress();
-            this.updateQuestionCounter();
-            this.updateNavigationButtons();
-        }
-    }
-
-    showQuestion(questionNum) {
-        // Hide all questions
-        for (let i = 1; i <= this.totalQuestions; i++) {
-            const q = document.getElementById(`question${i}`);
-            if (q) {
-                q.style.display = 'none';
-                q.classList.remove('active');
-            }
-        }
-        
-        // Show current question
-        const currentQ = document.getElementById(`question${questionNum}`);
-        if (currentQ) {
-            currentQ.style.display = 'block';
-            currentQ.classList.add('active');
-        }
-    }
-
-    saveCurrentAnswer() {
-        console.log('Saving answer for question', this.currentQuestion);
-        
-        switch (this.currentQuestion) {
-            case 1:
-                this.answers.age = parseInt(document.getElementById('age').value);
-                break;
-            case 2:
-                this.answers.sleepHours = parseFloat(document.getElementById('sleepHours').value);
-                break;
-            case 3:
-                const stress = document.querySelector('input[name="stress"]:checked');
-                if (stress) this.answers.stressLevel = parseInt(stress.value);
-                break;
-            case 4:
-                this.answers.sleepLatency = parseInt(document.getElementById('sleepLatency').value);
-                break;
-            case 5:
-                this.answers.nightAwakenings = parseInt(document.getElementById('nightAwakenings').value);
-                break;
-            case 6:
-                const chronotype = document.querySelector('input[name="chronotype"]:checked');
-                if (chronotype) this.answers.chronotype = parseInt(chronotype.value);
-                break;
-        }
-        
-        console.log('Current answers:', this.answers);
-    }
-
-    updateProgress() {
-        const progress = (this.currentQuestion / this.totalQuestions) * 100;
-        const progressBar = document.getElementById('quizProgressFill');
-        if (progressBar) {
-            progressBar.style.width = progress + '%';
-        }
-    }
-
-    updateQuestionCounter() {
-        const counterText = `Question ${this.currentQuestion} of ${this.totalQuestions}`;
-        const counter1 = document.getElementById('questionCounter');
-        const counter2 = document.getElementById('questionCounterBottom');
-        
-        if (counter1) counter1.textContent = counterText;
-        if (counter2) counter2.textContent = counterText;
-    }
-
-    updateNavigationButtons() {
-        const prevBtn = document.getElementById('prevQuestion');
-        const nextBtn = document.getElementById('nextQuestion');
-
-        if (prevBtn) prevBtn.disabled = this.currentQuestion === 1;
-
-        if (nextBtn) {
-            if (this.currentQuestion === this.totalQuestions) {
-                nextBtn.textContent = 'Get My Match →';
-                nextBtn.classList.add('submit');
-            } else {
-                nextBtn.textContent = 'Next →';
-                nextBtn.classList.remove('submit');
-            }
-        }
-    }
-
-    submitQuiz() {
-        this.saveCurrentAnswer();
-        console.log('Final answers:', this.answers);
-
-        document.getElementById('results').classList.add('show');
-        document.getElementById('loading').style.display = 'block';
-        document.getElementById('matchResults').style.display = 'none';
-
-        setTimeout(() => {
-            const match = findBestMatch(this.answers);
-            displayResults(this.answers, match);
-        }, 2000);
-    }
-}
-
-function initializePredictions() {
-    new QuizController();
-}
-
-function findBestMatch(userProfile) {
-    let bestMatch = null;
-    let smallestDistance = Infinity;
-
-    const stressRanges = [[15, 25], [25, 35], [35, 50], [50, 65], [65, 74]];
-    const userStress = (stressRanges[userProfile.stressLevel - 1][0] + stressRanges[userProfile.stressLevel - 1][1]) / 2;
-
-    const meqRanges = [
-        [16, 41],   // Definitely Evening (≤41)
-        [35, 41],   // Moderately Evening  
-        [42, 58],   // Neither/Intermediate (42-58)
-        [59, 70],   // Moderately Morning
-        [71, 86]    // Definitely Morning (≥59, but split into moderate/definite)
-    ];
-    const userMeq = (meqRanges[userProfile.chronotype - 1][0] + meqRanges[userProfile.chronotype - 1][1]) / 2;
+function createEfficiencyChart() {
+    const svg = d3.select("#efficiency-chart");
+    svg.selectAll("*").remove();
     
-    participants.forEach(participant => {
-        const ageDiff = Math.abs(participant.age - userProfile.age) / 20;
-        const sleepDiff = Math.abs(participant.sleepHours - userProfile.sleepHours) / 7;
-        const stressDiff = Math.abs(participant.stressScore - userStress) / 64;
-        const latencyDiff = Math.abs(participant.sleepLatency - userProfile.sleepLatency) / 30;
-       const awakeningsDiff = Math.abs(participant.nightAwakenings - userProfile.nightAwakenings) / 40;
-       const meqDiff = Math.abs(participant.meqScore - userMeq) / 26;
-
-       const distance = Math.sqrt(
-           Math.pow(ageDiff * 0.15, 2) +
-           Math.pow(sleepDiff * 0.25, 2) +
-           Math.pow(stressDiff * 0.25, 2) +
-           Math.pow(latencyDiff * 0.20, 2) +
-           Math.pow(awakeningsDiff * 0.10, 2) +
-           Math.pow(meqDiff * 0.05, 2)
-       );
-
-       if (distance < smallestDistance) {
-           smallestDistance = distance;
-           bestMatch = participant;
-       }
-   });
-
-   const similarity = Math.max(0, 100 - (smallestDistance * 100));
-   return { participant: bestMatch, similarity };
+    const g = svg.append("g")
+        .attr("transform", `translate(${margin.left},${margin.top})`);
+    
+    const xScale = d3.scaleLinear()
+        .domain([4, 12])
+        .range([0, chartWidth]);
+    
+    const yScale = d3.scaleLinear()
+        .domain([50, 100])
+        .range([chartHeight, 0]);
+    
+    // Axes
+    g.append("g")
+        .attr("class", "axis")
+        .attr("transform", `translate(0,${chartHeight})`)
+        .call(d3.axisBottom(xScale));
+    
+    g.append("g")
+        .attr("class", "axis")
+        .call(d3.axisLeft(yScale));
+    
+    // Axis labels
+    g.append("text")
+        .attr("class", "axis-label")
+        .attr("transform", `translate(${chartWidth/2}, ${chartHeight + 35})`)
+        .style("text-anchor", "middle")
+        .text("Sleep Duration (hours)");
+    
+    g.append("text")
+        .attr("class", "axis-label")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 0 - margin.left)
+        .attr("x", 0 - (chartHeight / 2))
+        .attr("dy", "1em")
+        .style("text-anchor", "middle")
+        .text("Sleep Efficiency (%)");
+    
+    updateEfficiencyChart(g, xScale, yScale);
 }
 
-function displayResults(userProfile, match) {
-   const participant = match.participant;
-   const similarity = match.similarity.toFixed(1);
-
-   const resultsHTML = `
-       <div class="match-header">
-           <div class="match-title">Your MMASH Sleep Match</div>
-           <div class="participant-id">Participant ${participant.id}</div>
-           <div class="accuracy">${similarity}% similarity to your sleep patterns</div>
-       </div>
-
-       <div class="comparison">
-           <div class="comparison-card predicted">
-               <h4>Your Sleep Profile</h4>
-               <p><strong>Age:</strong> ${userProfile.age} years</p>
-               <p><strong>Sleep Duration:</strong> ${userProfile.sleepHours} hours</p>
-               <p><strong>Stress Level:</strong> ${['Very Low', 'Low', 'Moderate', 'High', 'Very High'][userProfile.stressLevel - 1]}</p>
-               <p><strong>Sleep Latency:</strong> ${userProfile.sleepLatency} minutes</p>
-               <p><strong>Night Awakenings:</strong> ${userProfile.nightAwakenings} times</p>
-               <p><strong>Chronotype:</strong> ${['Definitely Evening', 'Moderately Evening', 'Neither', 'Moderately Morning', 'Definitely Morning'][userProfile.chronotype - 1]}</p>
-           </div>
-
-           <div class="comparison-card actual">
-               <h4>Matched Participant Data</h4>
-               <p><strong>Age:</strong> ${participant.age} years</p>
-               <p><strong>Sleep Duration:</strong> ${participant.sleepHours.toFixed(1)} hours</p>
-               <p><strong>Stress Score:</strong> ${participant.stressScore} (DSI)</p>
-               <p><strong>Sleep Latency:</strong> ${participant.sleepLatency} minutes</p>
-               <p><strong>Night Awakenings:</strong> ${participant.nightAwakenings} times</p>
-               <p><strong>Sleep Quality (PSQI):</strong> ${participant.psqi}</p>
-               <p><strong>Sleep Efficiency:</strong> ${participant.efficiency.toFixed(1)}%</p>
-           </div>
-       </div>
-
-       <div class="insights">
-           <h4>Sleep Science Insights</h4>
-           ${generateInsights(userProfile, participant)}
-       </div>
-   `;
-
-   document.getElementById('loading').style.display = 'none';
-   document.getElementById('matchResults').innerHTML = resultsHTML;
-   document.getElementById('matchResults').style.display = 'block';
+function updateEfficiencyChart(g, xScale, yScale) {
+    const dots = g.selectAll(".dot")
+        .data(filteredData, d => d.id);
+    
+    dots.enter()
+        .append("circle")
+        .attr("class", "dot")
+        .attr("r", 4)
+        .merge(dots)
+        .transition()
+        .duration(300)
+        .attr("cx", d => xScale(d.sleepDuration))
+        .attr("cy", d => yScale(d.efficiency))
+        .attr("fill", d => stressColorScale(d.stress));
+    
+    dots.exit().remove();
+    
+    g.selectAll(".dot")
+        .on("mouseover", (event, d) => {
+            tooltip.style("opacity", 1)
+                .html(`Stress: ${Math.round(d.stress)}<br/>Avg WASO: ${d.avgWASO.toFixed(1)} min<br/>Count: ${d.count}`)
+                .style("left", (event.pageX + 10) + "px")
+                .style("top", (event.pageY - 10) + "px");
+        })
+        .on("mouseout", () => {
+            tooltip.style("opacity", 0);
+        });
 }
 
-function generateInsights(user, participant) {
-   const insights = [];
-
-   // Sleep duration insights
-   if (participant.sleepHours < 6) {
-       insights.push(`<div class="insight"><strong>Short Sleep Duration:</strong> Your matched participant averaged ${participant.sleepHours.toFixed(1)} hours - well below the recommended 7-9 hours. This often correlates with higher stress and poorer sleep quality.</div>`);
-   } else if (participant.sleepHours > 8) {
-       insights.push(`<div class="insight"><strong>Long Sleep Duration:</strong> Your match got ${participant.sleepHours.toFixed(1)} hours of sleep, which may indicate good sleep hygiene or compensation for poor sleep quality.</div>`);
-   }
-
-   // Sleep quality insights
-   if (participant.psqi > 5) {
-       insights.push(`<div class="insight"><strong>Sleep Quality:</strong> Your matched participant had a PSQI score of ${participant.psqi}, indicating room for improvement in sleep quality (scores >5 suggest poor sleep).</div>`);
-   } else {
-       insights.push(`<div class="insight"><strong>Good Sleep Quality:</strong> Your match had a PSQI score of ${participant.psqi}, indicating relatively good sleep quality.</div>`);
-   }
-
-   // Stress insights
-   if (participant.stressScore > 40) {
-       insights.push(`<div class="insight"><strong>High Stress Impact:</strong> Your matched participant had a Daily Stress Inventory score of ${participant.stressScore}, which often correlates with sleep fragmentation and reduced sleep efficiency.</div>`);
-   }
-
-   // Sleep fragmentation
-   if (participant.nightAwakenings > 20) {
-       insights.push(`<div class="insight"><strong>Sleep Fragmentation:</strong> Your match experienced ${participant.nightAwakenings} awakenings per night, indicating fragmented sleep that reduces restorative sleep phases.</div>`);
-   }
-
-   // Recommendations based on patterns
-   if (user.sleepLatency > 15) {
-       insights.push(`<div class="insight"><strong>Recommendation:</strong> Your reported sleep onset time of ${user.sleepLatency} minutes suggests possible sleep hygiene improvements could help you fall asleep faster.</div>`);
-   }
-
-   if (insights.length === 0) {
-       insights.push(`<div class="insight"><strong>Balanced Profile:</strong> Your sleep patterns match someone with relatively balanced sleep metrics. Focus on maintaining consistent sleep schedules.</div>`);
-   }
-
-   return insights.join('');
+function createLatencyChart() {
+    const svg = d3.select("#latency-chart");
+    svg.selectAll("*").remove();
+    
+    const g = svg.append("g")
+        .attr("transform", `translate(${margin.left},${margin.top})`);
+    
+    const bins = d3.histogram()
+        .value(d => d.latency)
+        .domain([0, 30])
+        .thresholds(15)(filteredData);
+    
+    const xScale = d3.scaleLinear()
+        .domain([0, 30])
+        .range([0, chartWidth]);
+    
+    const yScale = d3.scaleLinear()
+        .domain([0, d3.max(bins, d => d.length)])
+        .range([chartHeight, 0]);
+    
+    // Axes
+    g.append("g")
+        .attr("class", "axis")
+        .attr("transform", `translate(0,${chartHeight})`)
+        .call(d3.axisBottom(xScale));
+    
+    g.append("g")
+        .attr("class", "axis")
+        .call(d3.axisLeft(yScale));
+    
+    // Axis labels
+    g.append("text")
+        .attr("class", "axis-label")
+        .attr("transform", `translate(${chartWidth/2}, ${chartHeight + 35})`)
+        .style("text-anchor", "middle")
+        .text("Sleep Latency (min)");
+    
+    g.append("text")
+        .attr("class", "axis-label")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 0 - margin.left)
+        .attr("x", 0 - (chartHeight / 2))
+        .attr("dy", "1em")
+        .style("text-anchor", "middle")
+        .text("Frequency");
+    
+    // Bars
+    g.selectAll(".bar")
+        .data(bins)
+        .enter()
+        .append("rect")
+        .attr("class", "bar")
+        .attr("x", d => xScale(d.x0))
+        .attr("width", d => xScale(d.x1) - xScale(d.x0) - 1)
+        .attr("y", d => yScale(d.length))
+        .attr("height", d => chartHeight - yScale(d.length))
+        .attr("fill", "#4ecdc4");
 }
 
-function moveMoonTo(sectionId) {
-    const moon = document.querySelector('.moon-character');
-    const target = document.getElementById(sectionId);
-
-    if (!moon || !target) return;
-
-    const oldRect = moon.getBoundingClientRect();
-    const newMoon = moon.cloneNode(true);
-    newMoon.style.position = 'absolute';
-    newMoon.style.zIndex = '1000';
-    newMoon.style.left = `${oldRect.left}px`;
-    newMoon.style.top = `${oldRect.top}px`;
-    newMoon.style.transition = 'all 1s ease-in-out';
-    newMoon.onclick = toggleSleepyMoon;
-
-    document.body.appendChild(newMoon);
-
-    const targetRect = target.getBoundingClientRect();
-    const xOffset = targetRect.left - oldRect.left;
-    const yOffset = targetRect.top - oldRect.top;
-
-    requestAnimationFrame(() => {
-        newMoon.style.transform = `translate(${xOffset}px, ${yOffset}px)`;
-    });
-
-    setTimeout(() => {
-        newMoon.style.position = '';
-        newMoon.style.left = '';
-        newMoon.style.top = '';
-        newMoon.style.transform = '';
-        target.appendChild(newMoon);
-        moon.remove(); // remove the original only after appending the new one
-    }, 1100);
+function createAwakeningsChart() {
+    const svg = d3.select("#awakenings-chart");
+    svg.selectAll("*").remove();
+    
+    const g = svg.append("g")
+        .attr("transform", `translate(${margin.left},${margin.top})`);
+    
+    const xScale = d3.scaleLinear()
+        .domain([20, 80])
+        .range([0, chartWidth]);
+    
+    const yScale = d3.scaleLinear()
+        .domain([0, d3.max(filteredData, d => d.awakenings) + 1])
+        .range([chartHeight, 0]);
+    
+    // Axes
+    g.append("g")
+        .attr("class", "axis")
+        .attr("transform", `translate(0,${chartHeight})`)
+        .call(d3.axisBottom(xScale));
+    
+    g.append("g")
+        .attr("class", "axis")
+        .call(d3.axisLeft(yScale));
+    
+    // Axis labels
+    g.append("text")
+        .attr("class", "axis-label")
+        .attr("transform", `translate(${chartWidth/2}, ${chartHeight + 35})`)
+        .style("text-anchor", "middle")
+        .text("Age");
+    
+    g.append("text")
+        .attr("class", "axis-label")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 0 - margin.left)
+        .attr("x", 0 - (chartHeight / 2))
+        .attr("dy", "1em")
+        .style("text-anchor", "middle")
+        .text("Number of Awakenings");
+    
+    // Dots
+    g.selectAll(".dot")
+        .data(filteredData)
+        .enter()
+        .append("circle")
+        .attr("class", "dot")
+        .attr("cx", d => xScale(d.age))
+        .attr("cy", d => yScale(d.awakenings))
+        .attr("r", 3)
+        .attr("fill", d => ageColorScale(d.age))
+        .on("mouseover", (event, d) => {
+            tooltip.style("opacity", 1)
+                .html(`Age: ${d.age}<br/>Awakenings: ${d.awakenings}<br/>Sleep Duration: ${d.sleepDuration}h`)
+                .style("left", (event.pageX + 10) + "px")
+                .style("top", (event.pageY - 10) + "px");
+        })
+        .on("mouseout", () => {
+            tooltip.style("opacity", 0);
+        });
 }
-const moonAnim = document.createElement('style');
-moonAnim.textContent = `
-    @keyframes moon-float {
-        0% { transform: scale(1) translateY(-20px); opacity: 0; }
-        50% { transform: scale(1.1) translateY(5px); opacity: 0.5; }
-        100% { transform: scale(1) translateY(0); opacity: 1; }
-    }
-`;
-document.head.appendChild(moonAnim);
-setTimeout(() => moveMoonTo('moon-in-hr'), 3000);
 
-// After quiz ends:
-document.getElementById("skipBtn").addEventListener("click", () => {
-    moveMoonTo("moon-in-predictor");
-});
+function createCaffeineChart() {
+    const svg = d3.select("#caffeine-chart");
+    svg.selectAll("*").remove();
+    
+    const g = svg.append("g")
+        .attr("transform", `translate(${margin.left},${margin.top})`);
+    
+    const xScale = d3.scaleLinear()
+        .domain([0, d3.max(filteredData, d => d.caffeineEvents) || 10])
+        .range([0, chartWidth]);
+    
+    const yScale = d3.scaleLinear()
+        .domain([d3.min(filteredData, d => d.efficiency) - 5, d3.max(filteredData, d => d.efficiency) + 5])
+        .range([chartHeight, 0]);
+    
+    // Axes
+    g.append("g")
+        .attr("class", "axis")
+        .attr("transform", `translate(0,${chartHeight})`)
+        .call(d3.axisBottom(xScale));
+    
+    g.append("g")
+        .attr("class", "axis")
+        .call(d3.axisLeft(yScale));
+    
+    // Axis labels
+    g.append("text")
+        .attr("class", "axis-label")
+        .attr("transform", `translate(${chartWidth/2}, ${chartHeight + 35})`)
+        .style("text-anchor", "middle")
+        .text("Caffeine Events per Day");
+    
+    g.append("text")
+        .attr("class", "axis-label")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 0 - margin.left)
+        .attr("x", 0 - (chartHeight / 2))
+        .attr("dy", "1em")
+        .style("text-anchor", "middle")
+        .text("Sleep Efficiency (%)");
+    
+    // Dots
+    g.selectAll(".dot")
+        .data(filteredData)
+        .enter()
+        .append("circle")
+        .attr("class", "dot")
+        .attr("cx", d => xScale(d.caffeineEvents))
+        .attr("cy", d => yScale(d.efficiency))
+        .attr("r", 4)
+        .attr("fill", "#e74c3c")
+        .on("mouseover", (event, d) => {
+            tooltip.style("opacity", 1)
+                .html(`Caffeine: ${d.caffeineEvents} events<br/>Efficiency: ${d.efficiency}%<br/>ID: ${d.id}`)
+                .style("left", (event.pageX + 10) + "px")
+                .style("top", (event.pageY - 10) + "px");
+        })
+        .on("mouseout", () => {
+            tooltip.style("opacity", 0);
+        });
+}
 
-document.addEventListener('DOMContentLoaded', function() {
-   new InfoController();
-});
+function createMovementChart() {
+    const svg = d3.select("#movement-chart");
+    svg.selectAll("*").remove();
+    
+    const g = svg.append("g")
+        .attr("transform", `translate(${margin.left},${margin.top})`);
+    
+    const movementType = d3.select("#movement-select").property("value");
+    const movementKey = `movement${movementType.charAt(0).toUpperCase() + movementType.slice(1)}`;
+    
+    const xScale = d3.scaleLinear()
+        .domain([0, d3.max(filteredData, d => d[movementKey]) || 200])
+        .range([0, chartWidth]);
+    
+    const yScale = d3.scaleLinear()
+        .domain([0, d3.max(filteredData, d => d.latency) + 5])
+        .range([chartHeight, 0]);
+    
+    // Axes
+    g.append("g")
+        .attr("class", "axis")
+        .attr("transform", `translate(0,${chartHeight})`)
+        .call(d3.axisBottom(xScale));
+    
+    g.append("g")
+        .attr("class", "axis")
+        .call(d3.axisLeft(yScale));
+    
+    // Axis labels
+    g.append("text")
+        .attr("class", "axis-label")
+        .attr("transform", `translate(${chartWidth/2}, ${chartHeight + 35})`)
+        .style("text-anchor", "middle")
+        .text(`${movementType.charAt(0).toUpperCase() + movementType.slice(1)} Movement (min)`);
+    
+    g.append("text")
+        .attr("class", "axis-label")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 0 - margin.left)
+        .attr("x", 0 - (chartHeight / 2))
+        .attr("dy", "1em")
+        .style("text-anchor", "middle")
+        .text("Sleep Latency (min)");
+    
+    // Dots
+    g.selectAll(".dot")
+        .data(filteredData)
+        .enter()
+        .append("circle")
+        .attr("class", "dot")
+        .attr("cx", d => xScale(d[movementKey]))
+        .attr("cy", d => yScale(d.latency))
+        .attr("r", 4)
+        .attr("fill", "#3498db")
+        .on("mouseover", (event, d) => {
+            tooltip.style("opacity", 1)
+                .html(`${movementType} Movement: ${d[movementKey]} min<br/>Latency: ${d.latency} min<br/>ID: ${d.id}`)
+                .style("left", (event.pageX + 10) + "px")
+                .style("top", (event.pageY - 10) + "px");
+        })
+        .on("mouseout", () => {
+            tooltip.style("opacity", 0);
+        });
+}
 
+function createScreenChart() {
+    const svg = d3.select("#screen-chart");
+    svg.selectAll("*").remove();
+    
+    const g = svg.append("g")
+        .attr("transform", `translate(${margin.left},${margin.top})`);
+    
+    const screenType = d3.select("#screen-select").property("value");
+    const screenKey = `screen${screenType.charAt(0).toUpperCase() + screenType.slice(1)}`;
+    
+    const xScale = d3.scaleLinear()
+        .domain([0, d3.max(filteredData, d => d[screenKey]) || 200])
+        .range([0, chartWidth]);
+    
+    const yScale = d3.scaleLinear()
+        .domain([0, d3.max(filteredData, d => d.waso) + 10])
+        .range([chartHeight, 0]);
+    
+    // Axes
+    g.append("g")
+        .attr("class", "axis")
+        .attr("transform", `translate(0,${chartHeight})`)
+        .call(d3.axisBottom(xScale));
+    
+    g.append("g")
+        .attr("class", "axis")
+        .call(d3.axisLeft(yScale));
+    
+    // Axis labels
+    g.append("text")
+        .attr("class", "axis-label")
+        .attr("transform", `translate(${chartWidth/2}, ${chartHeight + 35})`)
+        .style("text-anchor", "middle")
+        .text(`${screenType.charAt(0).toUpperCase() + screenType.slice(1)} Screen Time (min)`);
+    
+    g.append("text")
+        .attr("class", "axis-label")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 0 - margin.left)
+        .attr("x", 0 - (chartHeight / 2))
+        .attr("dy", "1em")
+        .style("text-anchor", "middle")
+        .text("WASO (min)");
+    
+    // Dots
+    g.selectAll(".dot")
+        .data(filteredData)
+        .enter()
+        .append("circle")
+        .attr("class", "dot")
+        .attr("cx", d => xScale(d[screenKey]))
+        .attr("cy", d => yScale(d.waso))
+        .attr("r", 4)
+        .attr("fill", "#9b59b6")
+        .on("mouseover", (event, d) => {
+            tooltip.style("opacity", 1)
+                .html(`${screenType} Screen: ${d[screenKey]} min<br/>WASO: ${d.waso} min<br/>ID: ${d.id}`)
+                .style("left", (event.pageX + 10) + "px")
+                .style("top", (event.pageY - 10) + "px");
+        })
+        .on("mouseout", () => {
+            tooltip.style("opacity", 0);
+        });
+}
 
+function updateMetrics() {
+    // If you want to show summary metrics, you can target an element and insert HTML like this:
+    const metricsDiv = document.getElementById("metrics-summary");
+    if (!metricsDiv) return;
 
+    const avgDuration = d3.mean(filteredData, d => d.sleepDuration);
+    const avgEfficiency = d3.mean(filteredData, d => d.efficiency);
+    const avgStress = d3.mean(filteredData, d => d.stress);
+    const avgAge = d3.mean(filteredData, d => d.age);
 
+    metricsDiv.innerHTML = `
+        <div><strong>Avg Duration:</strong> ${avgDuration.toFixed(1)} h</div>
+        <div><strong>Avg Efficiency:</strong> ${avgEfficiency.toFixed(1)}%</div>
+        <div><strong>Avg Stress:</strong> ${avgStress.toFixed(1)}</div>
+        <div><strong>Avg Age:</strong> ${avgAge.toFixed(1)}</div>
+    `;
+}
+function createWASOChart() {
+    const svg = d3.select("#waso-chart");
+    svg.selectAll("*").remove();
+
+    const g = svg.append("g")
+        .attr("transform", `translate(${margin.left},${margin.top})`);
+
+    // Group data by stress ranges
+    const stressBins = d3.range(0, 51, 5);
+    const binData = stressBins.map(bin => {
+        const inBin = filteredData.filter(d => d.stress >= bin && d.stress < bin + 5);
+        return {
+            stress: bin + 2.5,
+            avgWASO: d3.mean(inBin, d => d.waso) || 0,
+            count: inBin.length
+        };
+    }).filter(d => d.count > 0);
+
+    const xScale = d3.scaleBand()
+        .domain(binData.map(d => d.stress))
+        .range([0, chartWidth])
+        .padding(0.1);
+
+    const yScale = d3.scaleLinear()
+        .domain([0, d3.max(binData, d => d.avgWASO) || 50])
+        .range([chartHeight, 0]);
+
+    // Axes
+    g.append("g")
+        .attr("class", "axis")
+        .attr("transform", `translate(0,${chartHeight})`)
+        .call(d3.axisBottom(xScale).tickFormat(d => Math.round(d)));
+
+    g.append("g")
+        .attr("class", "axis")
+        .call(d3.axisLeft(yScale));
+
+    // Axis labels
+    g.append("text")
+        .attr("class", "axis-label")
+        .attr("transform", `translate(${chartWidth/2}, ${chartHeight + 35})`)
+        .style("text-anchor", "middle")
+        .text("Stress Level");
+
+    g.append("text")
+        .attr("class", "axis-label")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 0 - margin.left)
+        .attr("x", 0 - (chartHeight / 2))
+        .attr("dy", "1em")
+        .style("text-anchor", "middle")
+        .text("Average WASO (min)");
+
+    // Bars
+    g.selectAll(".bar")
+        .data(binData)
+        .enter()
+        .append("rect")
+        .attr("class", "bar")
+        .attr("x", d => xScale(d.stress))
+        .attr("width", xScale.bandwidth())
+        .attr("y", d => yScale(d.avgWASO))
+        .attr("height", d => chartHeight - yScale(d.avgWASO))
+        .attr("fill", "#ff6b6b")
+        .on("mouseover", (event, d) => {
+            tooltip.style("opacity", 1)
+                .html(`
+                    <strong>Stress Level:</strong> ${Math.round(d.stress)}<br/>
+                    <strong>Avg WASO:</strong> ${d.avgWASO.toFixed(1)} min<br/>
+                    <strong>Participants:</strong> ${d.count}
+                `)
+                .style("left", (event.pageX + 10) + "px")
+                .style("top", (event.pageY - 28) + "px");
+        })
+        .on("mouseout", () => {
+            tooltip.style("opacity", 0);
+        });
+}  
