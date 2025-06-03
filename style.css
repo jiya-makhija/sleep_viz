@@ -2285,3 +2285,8 @@ body::before {
     font-size: 14px;
 }
 
+
+.moon-anchor {
+    position: relative;
+    height: 80px;
+}
