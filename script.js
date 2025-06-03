@@ -3336,14 +3336,33 @@ function moveMoonTo(sectionId) {
 
     if (!moon || !target) return;
 
-    // Move moon with animation
+    const oldRect = moon.getBoundingClientRect();
     const newMoon = moon.cloneNode(true);
-    newMoon.style.animation = 'moon-float 1.2s ease-in-out';
-    newMoon.onclick = toggleSleepyMoon; // reattach click handler
+    newMoon.style.position = 'absolute';
+    newMoon.style.zIndex = '1000';
+    newMoon.style.left = `${oldRect.left}px`;
+    newMoon.style.top = `${oldRect.top}px`;
+    newMoon.style.transition = 'all 1s ease-in-out';
+    newMoon.onclick = toggleSleepyMoon;
 
-    // Remove old moon after short delay
-    moon.remove();
-    target.appendChild(newMoon);
+    document.body.appendChild(newMoon);
+
+    const targetRect = target.getBoundingClientRect();
+    const xOffset = targetRect.left - oldRect.left;
+    const yOffset = targetRect.top - oldRect.top;
+
+    requestAnimationFrame(() => {
+        newMoon.style.transform = `translate(${xOffset}px, ${yOffset}px)`;
+    });
+
+    setTimeout(() => {
+        newMoon.style.position = '';
+        newMoon.style.left = '';
+        newMoon.style.top = '';
+        newMoon.style.transform = '';
+        target.appendChild(newMoon);
+        moon.remove(); // remove the original only after appending the new one
+    }, 1100);
 }
 const moonAnim = document.createElement('style');
 moonAnim.textContent = `
